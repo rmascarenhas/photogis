@@ -1,12 +1,22 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Router, Route, browserHistory } from 'react-router';
 
-import Landing from './pages/Landing';
+import Main from './components/Main';
 
-// entry point of the front-end application. Render a landing page
-// which, after log-in or sign-up, will take the user to the main
-// app
+// The Index is the entry point of the front-end application.
+// It basically declares the application routes, which are handled
+// by `react-router`. Depending on the URL on the browser, the correct
+// compoenent is rendered.
+const Index = () => {
+  return (
+    <Router history={browserHistory}>
+      <Route path="/" component={Main} />
+    </Router>
+  );
+};
+
 ReactDOM.render(
-  <Landing />,
+  <Index />,
   document.getElementById('container')
 );
