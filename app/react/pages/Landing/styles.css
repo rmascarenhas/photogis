@@ -4,6 +4,10 @@
 }
 
 .login-signup {
-  max-width: 400px;
+  max-width: 600px;
   margin: 0 auto 10px;
+}
+
+.subscription-tip {
+  margin-left: 20px;
 }
