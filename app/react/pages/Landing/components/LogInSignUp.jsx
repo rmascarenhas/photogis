@@ -1,6 +1,8 @@
 import React from 'react';
 import { Button, Form, FormGroup, FormControl, Col, ControlLabel } from 'react-bootstrap';
 
+import Authentication from '../../../services/Authentication';
+
 const SubscriptionButtons = (props) => {
   return (
     <div className="well login-signup">
@@ -61,33 +63,88 @@ const SignUp = (props) => {
   );
 };
 
-const LogIn = (props) => {
-  return (
-    <div className="well login-signup">
-      <Form horizontal>
-        <FormGroup controlId="signUpEmail">
-          <Col componentClass={ControlLabel} sm={2}>
-            Email
-          </Col>
-          <Col sm={10}>
-            <FormControl type="email" placeholder="your@email.com" />
-          </Col>
-        </FormGroup>
+// LogIn: this is the log-in form. Only the email is requested. When
+// that is provided by the user, an API call is performed to the servers
+// (see the `Authentication` component).
+//
+// If the email belongs to a user previously registered, this component
+// redirects the application to the main app (/app). Otherwise, the errors
+// are presented in the log-in form.
+class LogIn extends React.Component {
+  constructor() {
+    super();
 
-        <FormGroup>
-          <Col smOffset={2} sm={10}>
-            <Button type="submit">
-              Log In
-            </Button>
+    this.authentication = new Authentication();
+    this.state = {
+      email: null
+    };
 
-            <span className="subscription-tip">
-              new user? <a href="#" onClick={() => props.onSignUpClick()}>Create an account</a>
-            </span>
-          </Col>
-        </FormGroup>
-      </Form>
-    </div>
-  );
+    // these functions are invoked as browser change events. Therefore,
+    // they need to be bound to the context of this "class".
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  // update the component state every time there is a change in the
+  // email field. This allows us to know the user's email when the form
+  // is submitted.
+  handleChange(event) {
+    this.setState({
+      email: event.target.value
+    });
+  }
+
+  // form submission: the user is trying to log-in: if all goes well, the user
+  // is redirected to them main app. Otherwise, errors are shown.
+  handleSubmit(event) {
+    const email = this.state.email;
+    const response = this.authentication.logIn(email, true);
+
+    if (response.isSuccess()) {
+      this.context.router.push('/app');
+    }
+
+    event.preventDefault();
+  }
+
+  render() {
+    return (
+      <div className="well login-signup">
+        <Form horizontal>
+          <FormGroup controlId="signUpEmail">
+            <Col componentClass={ControlLabel} sm={2}>
+              Email
+            </Col>
+            <Col sm={10}>
+              <FormControl
+                type="email"
+                value={this.state.value}
+                onChange={this.handleChange}
+                placeholder="your@email.com"
+              />
+            </Col>
+          </FormGroup>
+
+          <FormGroup>
+            <Col smOffset={2} sm={10}>
+              <Button type="submit" onClick={this.handleSubmit}>
+                Log In
+              </Button>
+
+              <span className="subscription-tip">
+                new user? <a href="#" onClick={() => this.props.onSignUpClick()}>Create an account</a>
+              </span>
+            </Col>
+          </FormGroup>
+        </Form>
+      </div>
+    );
+  }
+};
+
+// Enable redirection through `context.router.push`
+LogIn.contextTypes = {
+  router: React.PropTypes.object
 };
 
 // Top level class, the only component exported by this module.
@@ -125,7 +182,10 @@ class LogInSignUp extends React.Component {
                  onSignUpClick={() => this.chooseOption('signup')}
                />
       case 'login':
-        return <LogIn onSignUpClick={() => this.chooseOption('signup')} />;
+        return <LogIn
+                 onSignUpClick={() => this.chooseOption('signup')}
+                 onSubmit={(email) => this.handleLogIn(email)}
+               />;
       case 'signup':
         return <SignUp onLogInClick={() => this.chooseOption('login')} />;
     }

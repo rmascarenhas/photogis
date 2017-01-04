@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { Router, Route, browserHistory } from 'react-router';
 
 import Main from './components/Main';
+import MainApp from './pages/MainApp';
 
 // The Index is the entry point of the front-end application.
 // It basically declares the application routes, which are handled
@@ -12,6 +13,7 @@ const Index = () => {
   return (
     <Router history={browserHistory}>
       <Route path="/" component={Main} />
+      <Route path="/app" component={MainApp} />
     </Router>
   );
 };
