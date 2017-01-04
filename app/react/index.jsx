@@ -1,13 +1,12 @@
-var React = require('react');
-var ReactDOM = require('react-dom');
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-const HelloWorld = (props) => {
-  return (
-    <h1>Hello World</h1>
-  );
-}
+import Landing from './pages/Landing';
 
+// entry point of the front-end application. Render a landing page
+// which, after log-in or sign-up, will take the user to the main
+// app
 ReactDOM.render(
-  <HelloWorld />,
+  <Landing />,
   document.getElementById('container')
 );
