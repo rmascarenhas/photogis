@@ -1,0 +1,28 @@
+{
+  "name": "photogis",
+  "version": "1.0.0",
+  "description": "Pinpoint your photos on a map",
+  "main": "photogis.js",
+  "scripts": {
+    "build": "webpack --config webpack.config.js",
+    "start": "webpack-dev-server --content-base public"
+  },
+  "keywords": [],
+  "author": "Renato Mascarenhas",
+  "license": "GPL-3.0",
+  "devDependencies": {
+    "webpack": "^1.14.0",
+    "webpack-dev-server": "^1.16.2",
+    "babel-core": "^6.18.0",
+    "babel-loader": "^6.2.7",
+    "babel-preset-es2015": "^6.18.0",
+    "babel-preset-react": "^6.16.0",
+    "file-loader": "^0.9.0",
+    "style-loader": "^0.13.1",
+    "css-loader": "^0.25.0"
+  },
+  "dependencies": {
+    "react": "^15.3.2",
+    "react-dom": "^15.3.2"
+  }
+}
