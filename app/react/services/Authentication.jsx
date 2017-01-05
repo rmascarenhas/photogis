@@ -30,7 +30,7 @@ class Response {
 class Authentication {
   constructor() {
     this.apiClient = new Client();
-    this.storage = localStorage;
+    this.storage = sessionStorage;
   }
 
   isLoggedIn() {
