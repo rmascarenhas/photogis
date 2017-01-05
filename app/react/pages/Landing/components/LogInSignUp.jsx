@@ -140,13 +140,17 @@ class LogIn extends React.Component {
   // is redirected to them main app. Otherwise, errors are shown.
   handleSubmit(event) {
     const email = this.state.email;
-    const response = this.authentication.logIn(email, false);
 
-    if (response.isSuccess()) {
-      this.context.router.push('/app');
-    } else {
-      this.setState({ error: response.errorFor('email') });
-    }
+    // makes the API request. The callback function, which receives the parsed
+    // response, updates the component state on error, so as to give a feedback
+    // to the user.
+    const response = this.authentication.logIn(email, (response) => {
+      if (response.isSuccess()) {
+        this.context.router.push('/app');
+      } else {
+        this.setState({ error: response.errorFor('email') });
+      }
+    });
 
     event.preventDefault();
   }

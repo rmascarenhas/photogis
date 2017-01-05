@@ -1,10 +1,11 @@
 import React from 'react';
+import Client from './Client';
 
 // Response format
 //
 // Successful response:
 //
-//    { errors: {} }
+//    { status: 'OK', ... } // no `errors` key
 //
 // Failure response:
 //
@@ -13,9 +14,10 @@ import React from 'react';
 //    }
 class Response {
   constructor({ errors }) {
-    this.errors = errors;
+    this.errors = errors || {};
   }
 
+  // a successful response is that which does not have any errors.
   isSuccess() {
     return Object.keys(this.errors).length === 0;
   }
@@ -26,18 +28,17 @@ class Response {
 }
 
 class Authentication {
+  constructor() {
+    this.apiClient = new Client();
+  }
+
   isLoggedIn() {
     return false;
   }
 
-  logIn(email, success) {
-    if (success) {
-      return new Response({ errors: {} });
-    } else {
-      return new Response({ errors: {
-        email: 'email_invalid'
-      }});
-    }
+  // wraps the call to the API client, parsing the given response
+  logIn(email, fn) {
+    return this.apiClient.logIn(email, (data) => fn(new Response(data)));
   }
 }
 

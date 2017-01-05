@@ -29,6 +29,12 @@ module.exports = {
       }
     ]
   },
+  plugins: [
+    new webpack.DefinePlugin({
+      // TODO configurable per environment
+      API_URL: JSON.stringify('http://localhost:9292')
+    })
+  ],
   resolve: {
     extensions: ['', '.js', '.jsx']
   }
