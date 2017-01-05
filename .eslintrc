@@ -1,0 +1,15 @@
+{
+  "extends": "airbnb",
+  "rules": {
+    "comma-dangle": 0,
+    "import/no-extraneous-dependencies": 0,
+    "import/extensions": 0,
+    "jsx-a11y/no-static-element-interactions": 0
+  },
+  "env": {
+    "browser": true
+  },
+  "globals": {
+    "API_URL": true
+  }
+}
