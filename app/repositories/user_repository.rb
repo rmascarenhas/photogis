@@ -7,4 +7,8 @@ class UserRepository
   def self.count
     query.count
   end
+
+  def self.with_email(email)
+    query { where(email: email) }
+  end
 end

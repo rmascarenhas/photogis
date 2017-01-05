@@ -3,6 +3,8 @@ before do
   content_type :json
 end
 
+helpers Helpers::HTTP
+
 # GET /
 # Request Body: none
 #

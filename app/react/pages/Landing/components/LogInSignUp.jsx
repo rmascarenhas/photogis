@@ -120,8 +120,8 @@ class LogIn extends React.Component {
         return 'Please tell us your email';
       case 'email_invalid':
         return 'This is not a valid email address';
-      case 'email_taken':
-        return 'This email address is already registered';
+      case 'email_not_found':
+        return 'Could not find an account with that email';
       default:
         return 'Something went wrong. Please try again later';
     }
