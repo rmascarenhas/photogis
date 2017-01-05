@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+
+# bin/console
+# An interactive console for the back-end Sinatra app, making it easier
+# to explore the modules of the application.
+#
+# Creates a `pry` session with all application classes already loaded
+
+require_relative "../app"
+require "pry"
+
+Pry.config.prompt_name = "photogis"
+Pry.start

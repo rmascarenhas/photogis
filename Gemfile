@@ -12,4 +12,5 @@ gem "rack-cors", "~> 0.4.0", require: "rack/cors"
 
 group :development do
   gem "pry"
+  gem "pry-coolline"
 end
