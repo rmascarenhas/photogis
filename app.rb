@@ -3,6 +3,11 @@ require "sinatra"
 
 Bundler.require
 
+# load both the +.env.{environment}+ file and the general +.env+ file, in that
+# order, so that definitions on the environment specific file will take precendence
+# over those in the general one.
+Dotenv.load([".env.", ENV.fetch("RACK_ENV", "development")].join, ".env")
+
 configure do
   # load every Ruby file under app/ and lib/
   Dir["#{__dir__}/{app,lib}/**/*.rb"].each { |f| require_relative f }
