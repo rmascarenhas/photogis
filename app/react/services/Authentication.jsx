@@ -38,23 +38,43 @@ class Authentication {
   }
 
   // wraps the call to the API client, parsing the given response.
-  // On success, saves the user's access token on the browser's local
+  // On success, saves the user's access token on the browser's session
   // storage.
   logIn(email, fn) {
     return this.apiClient.logIn(email, (data) => {
       const response = new Response(data);
 
       if (response.isSuccess()) {
-        const currentUser = {
-          name: data['name'],
-          accessToken: data['accessToken']
-        };
-
-        this.storage.setItem('current_user', JSON.stringify(currentUser));
+        this.saveInSession(data['name'], data['accessToken']);
       }
 
       fn(response);
     });
+  }
+
+  // wraps an account creation call to the API. Saves the new user information
+  // on the session storage, causing the user to be logged in after sign up.
+  createAccount(name, email, fn) {
+    return this.apiClient.createAccount(name, email, (data) => {
+      const response = new Response(data);
+
+      if (response.isSuccess()) {
+        this.saveInSession(data['name'], data['accessToken']);
+      }
+
+      fn(response);
+    });
+  }
+
+  // saves the user's name and access token in the session storage.
+  // Invoked when the user logs in or signs up.
+  saveInSession(name, accessToken) {
+    const currentUser = {
+      name: name,
+      accessToken: accessToken
+    };
+
+    this.storage.setItem('current_user', JSON.stringify(currentUser));
   }
 }
 

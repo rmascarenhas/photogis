@@ -26,6 +26,13 @@ class Client {
     return this.performRequest('/users/login', body, fn);
   }
 
+  // API call
+  //    /users/signup
+  createAccount(name, email, fn) {
+    // TODO make an actual HTTP call
+    return fn({ name: name, accessToken: '12345' });
+  }
+
   performRequest(url, body, fn) {
     this.httpClient.post(url, body)
       .then((response) => {
