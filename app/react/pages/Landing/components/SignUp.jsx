@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, Form, FormGroup, FormControl, Col, ControlLabel, HelpBlock } from 'react-bootstrap';
 
 import Authentication from '../../../services/Authentication';
+import EmailValidationState from '../services/EmailValidationState';
 
 // SignUp: this is the sign-up form. User's name and email are requested in order
 // to create a new account. This performs an API call when the user provides the data
@@ -20,6 +21,20 @@ class SignUp extends React.Component {
 
     this.authentication = new Authentication();
     this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  getNameValidationState() {
+    // if the user still did not type anything, no feedback is needed
+    if (this.state.name === '') {
+      return null;
+    }
+
+    // otherwise, if anyting is typed, consider it to be a valid name
+    return 'success';
+  }
+
+  getEmailValidationState() {
+    return new EmailValidationState(this.state.email).getState();
   }
 
   // returns a function to be used as a onchange callback for the sign up form.
@@ -66,7 +81,7 @@ class SignUp extends React.Component {
     return (
       <div className="well login-signup">
         <Form horizontal>
-          <FormGroup controlId="loginName">
+          <FormGroup controlId="signUpName" validationState={this.getNameValidationState()}>
             <Col componentClass={ControlLabel} sm={2}>
               Name
             </Col>
@@ -79,7 +94,7 @@ class SignUp extends React.Component {
             </Col>
           </FormGroup>
 
-          <FormGroup controlId="loginEmail">
+          <FormGroup controlId="signUpEmail" validationState={this.getEmailValidationState()}>
             <Col componentClass={ControlLabel} sm={2}>
               Email
             </Col>

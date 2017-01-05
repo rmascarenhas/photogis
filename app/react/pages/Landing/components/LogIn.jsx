@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, Form, FormGroup, FormControl, Col, ControlLabel, HelpBlock } from 'react-bootstrap';
 
 import Authentication from '../../../services/Authentication';
+import EmailValidationState from '../services/EmailValidationState';
 
 // LogIn: this is the log-in form. Only the email is requested. When
 // that is provided by the user, an API call is performed to the servers
@@ -27,35 +28,8 @@ class LogIn extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  // Indicates the form validation state, used to provide some feedback to
-  // the user as she fills the log-in form.
-  //
-  // This is provided by Bootstrap styles and this method generates the
-  // validation status label based on the currently value of the email field,
-  // accessible via this component state.
   getValidationState() {
-
-    // if the user hasn't started typing aything yet (or the field is
-    // blank), do not assign any state for the email field validation
-    if (this.state.email === '') {
-      return null;
-    }
-
-    // this is a simple email validation, meant just to enhance the user
-    // experience as the email is typed. The final email validation happens
-    // at the server side when accounts are created.
-    const re = /\S+@\S+\.\S+/;
-
-    if (re.test(this.state.email)) {
-      return 'success';
-    }
-
-    // change the feedback to a warning if an `@` symbol is given
-    if (/@/.test(this.state.email)) {
-      return 'warning';
-    }
-
-    return 'error';
+    return new EmailValidationState(this.state.email).getState();
   }
 
   getValidationHelp() {
