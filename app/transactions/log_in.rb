@@ -10,9 +10,9 @@ module Transactions
     #
     # Wraps the result of the log-in operation.
     #
-    # authentication = Transactions::LogIn::Authentication.success!("12345")
-    # authentication.success?     # => true
-    # authentication.access_token # => "12345"
+    # authentication = Transactions::LogIn::Authentication.success!(user)
+    # authentication.success? # => true
+    # authentication.to_h     # => { "name" => "John Doe", "accessToken" => "12345" }
     #
     # authentication = Transactions::LogIn::Authentication.fail!("email" => "email_not_given")
     # authentication.success? # => false
@@ -47,9 +47,6 @@ module Transactions
 
     attr_reader :body
 
-    # actual regular expression that is used to validate emails.
-    EMAIL_RE = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
-
     def initialize(body)
       @body = body
     end
@@ -69,16 +66,13 @@ module Transactions
     def validate
       email = body["email"].to_s.strip
 
-      if email.size == 0
-        code = "email_not_given"
-      elsif !(email =~ EMAIL_RE)
-        code = "email_invalid"
-      elsif !user
-        code = "email_not_found"
-      end
-
-      {}.tap do |errors|
-        errors.merge!(email: code) if code
+      Validations::EmailValidation.new(email).validate.tap do |errors|
+        # if no format errors were found in the email provided, it is necessary
+        # to query the database to check if there is a user with the email
+        # address given.
+        if errors.empty? && !user
+          errors.merge!(email: "email_not_found")
+        end
       end
     end
 
