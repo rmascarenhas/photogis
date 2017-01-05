@@ -12,6 +12,10 @@ configure do
   # load every Ruby file under app/ and lib/
   Dir["#{__dir__}/{app,lib}/**/*.rb"].each { |f| require_relative f }
 
+  # load application initializers located under `config/initializers` after
+  # application files have been loaded
+  Dir["#{__dir__}/config/initializers/*.rb"].each { |f| require_relative f }
+
   # APIs use explicit HTTP methods
   disable :method_override
 
