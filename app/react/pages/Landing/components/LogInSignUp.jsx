@@ -77,7 +77,8 @@ class LogIn extends React.Component {
     this.authentication = new Authentication();
     this.state = {
       email: '',
-      error: null
+      error: null,
+      loading: false
     };
 
     // these functions are invoked as browser change events. Therefore,
@@ -94,6 +95,12 @@ class LogIn extends React.Component {
   // accessible via this component state.
   getValidationState() {
 
+    // if the user hasn't started typing aything yet (or the field is
+    // blank), do not assign any state for the email field validation
+    if (this.state.email === '') {
+      return null;
+    }
+
     // this is a simple email validation, meant just to enhance the user
     // experience as the email is typed. The final email validation happens
     // at the server side when accounts are created.
@@ -101,6 +108,11 @@ class LogIn extends React.Component {
 
     if (re.test(this.state.email)) {
       return 'success';
+    }
+
+    // change the feedback to a warning if an `@` symbol is given
+    if (/@/.test(this.state.email)) {
+      return 'warning';
     }
 
     return 'error';
@@ -139,6 +151,7 @@ class LogIn extends React.Component {
   // form submission: the user is trying to log-in: if all goes well, the user
   // is redirected to them main app. Otherwise, errors are shown.
   handleSubmit(event) {
+    this.setState({ loading: true });
     const email = this.state.email;
 
     // makes the API request. The callback function, which receives the parsed
@@ -148,7 +161,7 @@ class LogIn extends React.Component {
       if (response.isSuccess()) {
         this.context.router.push('/app');
       } else {
-        this.setState({ error: response.errorFor('email') });
+        this.setState({ error: response.errorFor('email'), loading: false });
       }
     });
 
@@ -156,6 +169,8 @@ class LogIn extends React.Component {
   }
 
   render() {
+    let loading = this.state.loading;
+
     return (
       <div className="well login-signup">
         <Form horizontal>
@@ -177,8 +192,13 @@ class LogIn extends React.Component {
 
           <FormGroup>
             <Col smOffset={2} sm={10}>
-              <Button type="submit" onClick={this.handleSubmit}>
-                Log In
+              <Button
+                bsStyle="info"
+                disabled={loading}
+                type="submit"
+                onClick={loading ? null : this.handleSubmit}
+              >
+                {loading ? 'Loading...' : 'Log In'}
               </Button>
 
               <span className="subscription-tip">
