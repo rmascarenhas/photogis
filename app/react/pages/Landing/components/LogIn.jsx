@@ -26,6 +26,14 @@ class LogIn extends React.Component {
     // they need to be bound to the context of this "class".
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+
+    this.errorMessages = {
+      email_not_given: 'Please tell us your email',
+      email_invalid: 'This is not a valid email address',
+      email_not_found: 'Could not find an account with that email'
+    };
+
+    this.defaultErrorMessage = 'Something went wrong. Please try again later';
   }
 
   getValidationState() {
@@ -33,24 +41,15 @@ class LogIn extends React.Component {
   }
 
   getValidationHelp() {
+    const error = this.state.error;
+
     // If there is no error (no API call performed yet), there is no help
     // message to be shown.
-    if (this.state.error === null) {
+    if (error === null) {
       return '';
     }
 
-    // translates the possible error codes from the API into human readable
-    // messages
-    switch (this.state.error) {
-      case 'email_not_given':
-        return 'Please tell us your email';
-      case 'email_invalid':
-        return 'This is not a valid email address';
-      case 'email_not_found':
-        return 'Could not find an account with that email';
-      default:
-        return 'Something went wrong. Please try again later';
-    }
+    return this.errorMessages[error] || this.defaultErrorMessage;
   }
 
   // update the component state every time there is a change in the
