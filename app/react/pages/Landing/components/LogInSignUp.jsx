@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Form, FormGroup, FormControl, Col, ControlLabel } from 'react-bootstrap';
+import { Button, Form, FormGroup, FormControl, Col, ControlLabel, HelpBlock } from 'react-bootstrap';
 
 import Authentication from '../../../services/Authentication';
 
@@ -76,13 +76,55 @@ class LogIn extends React.Component {
 
     this.authentication = new Authentication();
     this.state = {
-      email: null
+      email: '',
+      error: null
     };
 
     // these functions are invoked as browser change events. Therefore,
     // they need to be bound to the context of this "class".
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  // Indicates the form validation state, used to provide some feedback to
+  // the user as she fills the log-in form.
+  //
+  // This is provided by Bootstrap styles and this method generates the
+  // validation status label based on the currently value of the email field,
+  // accessible via this component state.
+  getValidationState() {
+
+    // this is a simple email validation, meant just to enhance the user
+    // experience as the email is typed. The final email validation happens
+    // at the server side when accounts are created.
+    const re = /\S+@\S+\.\S+/;
+
+    if (re.test(this.state.email)) {
+      return 'success';
+    }
+
+    return 'error';
+  }
+
+  getValidationHelp() {
+    // If there is no error (no API call performed yet), there is no help
+    // message to be shown.
+    if (this.state.error === null) {
+      return '';
+    }
+
+    // translates the possible error codes from the API into human readable
+    // messages
+    switch (this.state.error) {
+      case 'email_not_given':
+        return 'Please tell us your email';
+      case 'email_invalid':
+        return 'This is not a valid email address';
+      case 'email_taken':
+        return 'This email address is already registered';
+      default:
+        return 'Something went wrong. Please try again later';
+    }
   }
 
   // update the component state every time there is a change in the
@@ -98,10 +140,12 @@ class LogIn extends React.Component {
   // is redirected to them main app. Otherwise, errors are shown.
   handleSubmit(event) {
     const email = this.state.email;
-    const response = this.authentication.logIn(email, true);
+    const response = this.authentication.logIn(email, false);
 
     if (response.isSuccess()) {
       this.context.router.push('/app');
+    } else {
+      this.setState({ error: response.errorFor('email') });
     }
 
     event.preventDefault();
@@ -111,7 +155,7 @@ class LogIn extends React.Component {
     return (
       <div className="well login-signup">
         <Form horizontal>
-          <FormGroup controlId="signUpEmail">
+          <FormGroup controlId="signUpEmail" validationState={this.getValidationState()}>
             <Col componentClass={ControlLabel} sm={2}>
               Email
             </Col>
@@ -122,6 +166,8 @@ class LogIn extends React.Component {
                 onChange={this.handleChange}
                 placeholder="your@email.com"
               />
+              <FormControl.Feedback />
+              <HelpBlock>{this.getValidationHelp()}</HelpBlock>
             </Col>
           </FormGroup>
 

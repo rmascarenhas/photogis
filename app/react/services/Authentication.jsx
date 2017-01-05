@@ -2,9 +2,14 @@ import React from 'react';
 
 // Response format
 //
+// Successful response:
+//
+//    { errors: {} }
+//
+// Failure response:
+//
 //    {
-//      "success": true/false,
-//      "errors": { "email": ["email_invalid"] }
+//      errors: { email: "already_registered", name: "cannot_be_blank" }
 //    }
 class Response {
   constructor({ errors }) {
@@ -15,7 +20,7 @@ class Response {
     return Object.keys(this.errors).length === 0;
   }
 
-  errorsFor(field) {
+  errorFor(field) {
     return this.errors[field];
   }
 }
@@ -30,7 +35,7 @@ class Authentication {
       return new Response({ errors: {} });
     } else {
       return new Response({ errors: {
-        email: 'invalid_email'
+        email: 'email_invalid'
       }});
     }
   }
