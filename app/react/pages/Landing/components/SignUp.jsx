@@ -16,11 +16,24 @@ class SignUp extends React.Component {
 
     this.state = {
       name: '',
-      email: ''
+      email: '',
+      errors: {}
     };
 
     this.authentication = new Authentication();
     this.handleSubmit = this.handleSubmit.bind(this);
+
+    // maps the codes from possible error scenarios when creating accounts
+    // to human readable help messages to be displayed inline on the form
+    this.validationMessages = {
+      name_not_given: 'Please tell us your name',
+      email_not_given: 'Please tell us your email',
+      email_invalid: 'This is not a valid email address',
+      email_taken: 'This email is already registered'
+    };
+
+    // when the error is not recognised, display a generic error message
+    this.defaultError = 'Something went wrong. Please try again later';
   }
 
   getNameValidationState() {
@@ -35,6 +48,16 @@ class SignUp extends React.Component {
 
   getEmailValidationState() {
     return new EmailValidationState(this.state.email).getState();
+  }
+
+  validationHelpFor(field) {
+    const error = this.state.errors[field];
+
+    if (error === undefined) {
+      return '';
+    }
+
+    return this.validationMessages[error] || this.defaultError;
   }
 
   // returns a function to be used as a onchange callback for the sign up form.
@@ -69,8 +92,9 @@ class SignUp extends React.Component {
       if (response.isSuccess()) {
         this.context.router.push('/app');
       } else {
-        // TODO handle errors
-        this.setState({});
+        this.setState({
+          errors: { name: response.errorFor('name'), email: response.errorFor('email') }
+        });
       }
     });
 
@@ -91,6 +115,8 @@ class SignUp extends React.Component {
                 value={this.state.name}
                 onChange={this.handleChangeFor('name')}
               />
+              <FormControl.Feedback />
+              <HelpBlock>{this.validationHelpFor('name')}</HelpBlock>
             </Col>
           </FormGroup>
 
@@ -105,6 +131,8 @@ class SignUp extends React.Component {
                 onChange={this.handleChangeFor('email')}
                 placeholder="your@email.com"
               />
+              <FormControl.Feedback />
+              <HelpBlock>{this.validationHelpFor('email')}</HelpBlock>
             </Col>
           </FormGroup>
 
