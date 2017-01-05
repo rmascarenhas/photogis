@@ -30,15 +30,31 @@ class Response {
 class Authentication {
   constructor() {
     this.apiClient = new Client();
+    this.storage = localStorage;
   }
 
   isLoggedIn() {
-    return false;
+    return !!this.storage.getItem('current_user');
   }
 
-  // wraps the call to the API client, parsing the given response
+  // wraps the call to the API client, parsing the given response.
+  // On success, saves the user's access token on the browser's local
+  // storage.
   logIn(email, fn) {
-    return this.apiClient.logIn(email, (data) => fn(new Response(data)));
+    return this.apiClient.logIn(email, (data) => {
+      const response = new Response(data);
+
+      if (response.isSuccess()) {
+        const currentUser = {
+          name: data['name'],
+          accessToken: data['accessToken']
+        };
+
+        this.storage.setItem('current_user', JSON.stringify(currentUser));
+      }
+
+      fn(response);
+    });
   }
 }
 

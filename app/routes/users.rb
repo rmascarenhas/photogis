@@ -15,7 +15,7 @@ post "/users/login" do
   authentication = Transactions::LogIn.new(request_body).run
 
   if authentication.success?
-    [200, { access_token: authentication.access_token }.to_json]
+    [200, { access_token: authentication.to_h }.to_json]
   else
     [422, { errors: authentication.errors }.to_json]
   end

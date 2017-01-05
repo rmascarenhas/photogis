@@ -22,19 +22,26 @@ module Transactions
         new(nil, errors)
       end
 
-      def self.success(token)
+      def self.success!(token)
         new(token, nil)
       end
 
-      attr_reader :access_token, :errors
+      attr_reader :user, :errors
 
-      def initialize(access_token, errors)
-        @access_token = access_token
+      def initialize(user, errors)
+        @user = user
         @errors = errors
       end
 
       def success?
-        !!access_token
+        !!user
+      end
+
+      def to_h
+        {
+          name: user.name,
+          accessToken: user.access_token
+        }
       end
     end
 
@@ -54,7 +61,7 @@ module Transactions
         return Authentication.fail!(errors)
       end
 
-      Authentication.success!(user.access_token)
+      Authentication.success!(user)
     end
 
     private
