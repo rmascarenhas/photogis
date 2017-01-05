@@ -22,7 +22,7 @@ class Client {
   // API call
   //    /users/login
   logIn(email, fn) {
-    const body = { email: email }
+    const body = { email: email };
     return this.performRequest('/users/login', body, fn);
   }
 
