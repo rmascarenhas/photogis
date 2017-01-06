@@ -37,6 +37,16 @@ class Authentication {
     return !!this.storage.getItem('current_user');
   }
 
+  // if there is a currently logged in user, returns a JavaScript object
+  // containing user information (that is, `name` and `accessToken`).
+  //
+  // Returns `undefined` otherwise.
+  currentUser() {
+    if (this.isLoggedIn()) {
+      return JSON.parse(this.storage.getItem('current_user'));
+    }
+  }
+
   // wraps the call to the API client, parsing the given response.
   // On success, saves the user's access token on the browser's session
   // storage.
