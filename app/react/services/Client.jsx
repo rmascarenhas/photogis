@@ -29,9 +29,8 @@ class Client {
   // API call
   //    /users/signup
   createAccount(name, email, fn) {
-    // TODO make an actual HTTP call
-    // return fn({ name: name, accessToken: '12345' });
-    return fn({ errors: { email: 'email_taken' } });
+    const body = { name: name, email: email };
+    return this.performRequest('/users/signup', body, fn);
   }
 
   performRequest(url, body, fn) {

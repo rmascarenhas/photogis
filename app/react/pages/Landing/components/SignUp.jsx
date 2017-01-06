@@ -53,7 +53,7 @@ class SignUp extends React.Component {
   validationHelpFor(field) {
     const error = this.state.errors[field];
 
-    if (error === undefined) {
+    if (!this.state.errors.hasOwnProperty(field)) {
       return '';
     }
 
