@@ -11,6 +11,10 @@
   "keywords": [],
   "author": "Renato Mascarenhas",
   "license": "GPL-3.0",
+  "repository": {
+    "url": "git@github.com:rmascarenhas/photogis.git",
+    "type": "git"
+  },
   "devDependencies": {
     "webpack": "^1.14.0",
     "webpack-dev-server": "^1.16.2",
