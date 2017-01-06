@@ -8,3 +8,9 @@
 .app-greeting {
   color: #fbf8ef;
 }
+
+.logout-btn {
+  color: #fbf8ef;
+  padding: 5px;
+  background-color: #a2fc9c;
+}

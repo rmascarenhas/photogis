@@ -47,6 +47,10 @@ class Authentication {
     }
   }
 
+  logOut() {
+    this.storage.removeItem('current_user');
+  }
+
   // wraps the call to the API client, parsing the given response.
   // On success, saves the user's access token on the browser's session
   // storage.
