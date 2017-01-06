@@ -24,7 +24,7 @@ class Navigation extends React.Component {
 
   render() {
     return (
-      <Navbar inverse>
+      <Navbar>
         <Navbar.Header>
           <Navbar.Brand>
             <span className="logo">PhotoGIS</span>

@@ -1,12 +1,13 @@
 .logo {
   font-family: Myriad, 'Lucida Grande', sans-serif;
   font-size: 30px;
-  color: #a2fc9c;
+  color: #101010;
   margin-right: 20px;
 }
 
 .app-greeting {
-  color: #fbf8ef;
+  color: #1d3f4b;
+  font-weight: bold;
 }
 
 .logout-btn {
