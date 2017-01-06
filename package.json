@@ -4,8 +4,8 @@
   "description": "Pinpoint your photos on a map",
   "main": "photogis.js",
   "scripts": {
-    "build": "webpack --config webpack.config.js",
-    "start": "webpack-dev-server --content-base public",
+    "build": "webpack -p --config webpack/production.config.js",
+    "start": "webpack-dev-server --content-base public --config webpack/dev.config.js",
     "lint": "eslint app/react/** --ignore-pattern *.css"
   },
   "keywords": [],
