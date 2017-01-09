@@ -4,13 +4,17 @@
   "description": "Pinpoint your photos on a map",
   "main": "photogis.js",
   "scripts": {
-    "build": "webpack --config webpack.config.js",
-    "start": "webpack-dev-server --content-base public",
+    "build": "webpack -p --config webpack/production.config.js",
+    "start": "webpack-dev-server --content-base public --config webpack/dev.config.js",
     "lint": "eslint app/react/** --ignore-pattern *.css"
   },
   "keywords": [],
   "author": "Renato Mascarenhas",
   "license": "GPL-3.0",
+  "repository": {
+    "url": "git@github.com:rmascarenhas/photogis.git",
+    "type": "git"
+  },
   "devDependencies": {
     "webpack": "^1.14.0",
     "webpack-dev-server": "^1.16.2",
@@ -32,6 +36,8 @@
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
     "react-router": "^3.0.0",
-    "react-bootstrap": "^0.30.6"
+    "react-bootstrap": "^0.30.6",
+    "leaflet": "^1.0.0",
+    "react-leaflet": "^1.0.1"
   }
 }

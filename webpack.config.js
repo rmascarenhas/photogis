@@ -15,6 +15,7 @@ module.exports = {
       {
         test: /\.jsx?$/,
         loader: 'babel-loader',
+        exclude: /node_modules/,
         query: {
           presets: ['es2015', 'react']
         }
@@ -29,12 +30,6 @@ module.exports = {
       }
     ]
   },
-  plugins: [
-    new webpack.DefinePlugin({
-      // TODO configurable per environment
-      API_URL: JSON.stringify('http://localhost:9292')
-    })
-  ],
   resolve: {
     extensions: ['', '.js', '.jsx']
   }
